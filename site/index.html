@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>Lifestyling</title>
+  <title>Macro Meal Plan Builder</title>
   <!--Required meta tags-->
   <meta chaset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -12,18 +12,36 @@
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
-  <div class="container">
+<body onload="onLoad()">
+  <div class="container mt-5">
+    <div class="row">
+      <h3>Enter Macro Goals Below</h3>
+    </div>
     <div class="form">
-      <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" class="form-control" id="name" placeholder="Enter name">
+      <div class="form-group row">
+        <div class="col-3">
+          <label for="carbs">Carbs (g)</label>
+          <input type="number" class="form-control" id="carbs" placeholder="Enter carbs (g)">
+        </div>
+        <div class="col-3">
+          <label for="fat">Fat (g)</label>
+          <input type="number" class="form-control" id="fat" placeholder="Enter fat (g)">
+        </div>
+        <div class="col-3">
+          <label for="protein">Protein (g)</label>
+          <input type="number" class="form-control" id="protein" placeholder="Enter protein (g)">
+        </div>
+        <div class="col-3">
+          <p class="lead" id="calculatedCals">Total Calories: </p>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" class="form-control" id="email" placeholder="Enter email address">
+      <div class="form-group row">
+        <button id="calculateBtn" type="submit" class="btn btn-primary">Calculate</button>
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <hr />
+    <div class="row">
+      <h3>Now Enter Foods</h3>
     </div>
   </div>
   <!-- Optional JavaScript -->
@@ -33,5 +51,27 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="vendor/bootstrap-4.0.0/dist/js/bootstrap.min.js"></script>
   <script src="main.js"></script>
+  <script type="module">
+    // Enable strict mode
+    "use strict";
+
+    import { Food, DailyGoals, calculateServings } from "./main.js";
+    var foods = [];
+
+    function onLoad() {
+      document.getElementById("calculateBtn").addEventListener("click", calculateCals);
+    }
+
+    function calculateCals() {
+      var carbs = $("#carbs").val();
+      var fat = $("#fat").val();
+      var prot = $("#protein").val();
+      var cals = 4 * parseInt(carbs) + 9 * parseInt(fat) + 4 * parseInt(prot);
+      if (!cals) {
+        return;
+      }
+      $("#calculatedCals").first().text("Total Calories: " + cals.toString());
+    }
+  </script>
 </body>
 </html>
