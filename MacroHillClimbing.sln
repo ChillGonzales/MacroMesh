@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MacroHillClimbing", "MacroHillClimbing\MacroHillClimbing.csproj", "{622EEE4F-7D70-4888-839E-F4B95CF867BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csproj", "{B49655A7-5142-41A1-83CE-EFBDAA21E653}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{622EEE4F-7D70-4888-839E-F4B95CF867BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{622EEE4F-7D70-4888-839E-F4B95CF867BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{622EEE4F-7D70-4888-839E-F4B95CF867BA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B49655A7-5142-41A1-83CE-EFBDAA21E653}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B49655A7-5142-41A1-83CE-EFBDAA21E653}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B49655A7-5142-41A1-83CE-EFBDAA21E653}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B49655A7-5142-41A1-83CE-EFBDAA21E653}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
