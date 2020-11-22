@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body onload="onLoad()">
+<body>
   <div class="container mt-5">
     <div class="row">
       <h3>Enter Macro Goals Below</h3>
@@ -37,6 +37,7 @@
       </div>
       <div class="form-group row">
         <button id="calculateBtn" type="submit" class="btn btn-primary">Calculate</button>
+        <button id="servingsBtn" type="submit" class="btn btn-success">Get Servings</button>
       </div>
     </div>
     <hr />
@@ -50,26 +51,47 @@
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="vendor/bootstrap-4.0.0/dist/js/bootstrap.min.js"></script>
-  <script src="main.js"></script>
   <script type="module">
     // Enable strict mode
     "use strict";
-
     import { Food, DailyGoals, calculateServings } from "./main.js";
-    var foods = [];
+    let eggs = new Food("Eggs", 1, 6, 5, 1, 4);
+    let chicken = new Food("Chicken", 0, 9, 1, 1, 18);
+    let beef = new Food("Beef", 0, 7, 5, 1, 18);
+    let cheese = new Food("Cheese", 0, 7, 9, 1, 5);
+    let rice = new Food("Rice", 8, 1, 0, 1, 16);
+    let foods = [eggs, chicken, beef, cheese, rice];
+    let goals = new DailyGoals();
+    onLoad();
 
     function onLoad() {
       document.getElementById("calculateBtn").addEventListener("click", calculateCals);
+      document.getElementById("servingsBtn").addEventListener("click", calcServings);
+      $("#carbs").val("45");
+      $("#fat").val("140");
+      $("#protein").val("250");
+      calculateCals();
+    }
+
+    function calcServings() {
+      let input = foods.map(x => x.clone());
+      let result = calculateServings(input, goals);
+      console.log(result);
+      // TODO: show result
     }
 
     function calculateCals() {
-      var carbs = $("#carbs").val();
-      var fat = $("#fat").val();
-      var prot = $("#protein").val();
-      var cals = 4 * parseInt(carbs) + 9 * parseInt(fat) + 4 * parseInt(prot);
+      var carbs = parseInt($("#carbs").val());
+      var fat = parseInt($("#fat").val());
+      var prot = parseInt($("#protein").val());
+      var cals = 4 * carbs + 9 * fat + 4 * prot;
       if (!cals) {
         return;
       }
+      goals.carbs = carbs;
+      goals.fat = fat;
+      goals.protein = prot;
+      goals.calories = cals;
       $("#calculatedCals").first().text("Total Calories: " + cals.toString());
     }
   </script>

@@ -1,7 +1,7 @@
 // Enable strict mode
 "use strict";
 
-class Food {
+export class Food {
   constructor(name, carbsPerServing, proteinPerServing, fatPerServing, minServing, maxServing) {
     this.name = name;
     this.carbsPerServing = carbsPerServing;
@@ -12,6 +12,11 @@ class Food {
     this.servings = 1;
   }
 
+  clone() {
+    let temp = new Food(this.name, this.carbsPerServing, this.proteinPerServing, this.fatPerServing, this.minServing, this.maxServing, this.servings);
+    temp.servings = this.servings;
+    return temp;
+  }
   get totalFat() {
     return this.servings * this.fatPerServing;
   }
@@ -19,14 +24,14 @@ class Food {
     return this.servings * this.carbsPerServing;
   }
   get totalProtein() {
-    return this.servings * this.totalProtein;
+    return this.servings * this.proteinPerServing;
   }
   get totalCalories() {
     return this.servings * (4 * this.carbsPerServing + 4 * this.proteinPerServing + 9 * this.fatPerServing);
   }
 }
 
-class DailyGoals {
+export class DailyGoals {
   constructor(calories, carbs, protein, fat) {
     this.calories = calories;
     this.carbs = carbs;
@@ -35,7 +40,7 @@ class DailyGoals {
   }
 }
 
-class Differences {
+export class Differences {
   constructor(carbDiff, fatDiff, proteinDiff, calDiff, carbImportance = 0.25, fatImportance = 0.25, proteinImportance = 0.25, calImportance = 0.25) {
     this.carbDiff = carbDiff;
     this.carbImportance = carbImportance;
@@ -60,7 +65,7 @@ class Differences {
  * @param {DailyGoals} goals An object containing information about macro goals.
  * @return {Food[]} Array of food objects with optimized servings set.
  */
-function calculateServings(foods, goals) {
+export function calculateServings(foods, goals) {
   // TODO: Might need higher than 50 iteration cap
   for (let i = 0; i < 50; i++) {
     let diffs = getDifferences(foods, goals);
@@ -92,6 +97,7 @@ function printSummary(foods, goals) {
     acc.totalFat += cur.totalFat;
     acc.totalProtein += cur.totalProtein;
     acc.totalCalories += cur.totalCalories;
+    return acc;
   }, { totalCarbs: 0, totalFat: 0, totalCalories: 0, totalProtein: 0 });
 
   console.log(`Carbs ended at ${sums.totalCarbs}g with a goal of ${goals.carbs}g`);
@@ -135,12 +141,12 @@ function getPossibleChanges(foods) {
 
   let list = [];
   binaries.forEach(binary => {
+    let chars = [...binary];
     // Don't give an option of no change
-    if (binary.every(x => x === "0")) {
-      continue;
+    if (chars.every(x => x === "0")) {
+      return;
     }
 
-    let chars = [...binary];
     var change = {};
 
     // Here we're using the values in the base 2 or 3 representation to correspond to the value of each food.
@@ -149,7 +155,7 @@ function getPossibleChanges(foods) {
       change[foods[i].name] = parseInt(chars[i].toString());
     }
     if (isValidChange(foods, change)) {
-      list.Add(change);
+      list.push(change);
     }
   });
 
@@ -157,9 +163,9 @@ function getPossibleChanges(foods) {
 }
 
 function isValidChange(foods, change) {
-  applyChange(foods);
+  applyChange(change, foods);
   let valid = foods.every(x => x.servings >= x.minServing && x.servings <= x.maxServing);
-  revertChange(foods);
+  revertChange(change, foods);
   return valid;
 }
 
@@ -170,14 +176,14 @@ function isValidChange(foods, change) {
  */
 function findBestChange(foods, goals, changes) {
   // Use one object to test each change as they're easy to apply/revert
-  let tempFood = foods.clone();
+  let tempFood = foods.map(x => x.clone());
   let bestChange = null;
   let bestFood = foods;
   changes.forEach(change => {
     applyChange(change, tempFood);
-    if (compareFoodToGaols(tempFood, bestFood, goals)) {
+    if (compareFoodToGoals(tempFood, bestFood, goals)) {
       // Store current best
-      bestFood = tempFood.clone();
+      bestFood = tempFood.map(x => x.clone());
       bestChange = change;
     }
     revertChange(change, tempFood);
@@ -210,7 +216,7 @@ function revertChange(change, foods) {
  * @param {DailyGoals} goals Daily goals we're trying to hit.
  * @return {boolean} True if foodA is closer to our goal.
  */
-function compareFoodsToGoals(foodA, foodB, goals) {
+function compareFoodToGoals(foodA, foodB, goals) {
   if (!foodA && !foodB) {
     throw "You can't compare two undefined foods dummy.";
   }
@@ -228,16 +234,17 @@ function compareFoodsToGoals(foodA, foodB, goals) {
 
 function getDifferences(foods, goals) {
   let totals = foods.reduce((acc, cur) => {
-    acc.totalCalories += cur.calories;
+    acc.totalCalories += cur.totalCalories;
     acc.totalCarbs += cur.totalCarbs;
     acc.totalFat += cur.totalFat;
     acc.totalProtein += cur.totalProtein;
+    return acc;
   }, { totalCarbs: 0, totalFat: 0, totalProtein: 0, totalCalories: 0 });
 
-  return new Differences(goals.totalCarbs - totals.totalCarbs,
-    goals.totalFat - totals.totalFat,
-    goals.totalProtein - totals.totalProtein,
-    goals.totalCalories - totals.totalCalories);
+  return new Differences(goals.carbs - totals.totalCarbs,
+    goals.fat - totals.totalFat,
+    goals.protein - totals.totalProtein,
+    goals.calories - totals.totalCalories);
 }
 
 /**
