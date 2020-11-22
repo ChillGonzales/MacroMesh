@@ -36,17 +36,79 @@
         </div>
       </div>
       <div class="form-group row">
-        <button id="calculateBtn" type="submit" class="btn btn-primary">Calculate</button>
-        <button id="servingsBtn" type="submit" class="btn btn-success">Get Servings</button>
+        <div class="col">
+          <button id="calculateBtn" type="submit" class="btn btn-primary">Calculate</button>
+        </div>
       </div>
     </div>
-    <hr />
-    <div class="row">
-      <h3>Now Enter Foods</h3>
+    <div id="foodSection" class="d-none">
+      <hr />
+      <div class="row">
+        <h3>Select Foods</h3>
+      </div>
+      <div id="select1" class="selectContainer">
+        <div class="row pt-3">
+          <div class="col-2">
+            <p>Food 1</p>
+          </div>
+          <div class="col-10">
+            <select id="foodSelect1" class="form-control foodSelect">
+              <option value="Eggs">Eggs</option>
+              <option value="Chicken">Chicken Breast</option>
+              <option value="Beef">80/20 Ground Beef</option>
+              <option value="Cheese">Cheese</option>
+              <option value="Rice">White Rice</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div id="select2" class="selectContainer">
+        <div class="row pt-2">
+          <div class="col-2">
+            <p>Food 2</p>
+          </div>
+          <div class="col-10">
+            <select id="foodSelect2" class="form-control foodSelect">
+              <option value="Eggs">Eggs</option>
+              <option selected value="Chicken">Chicken Breast</option>
+              <option value="Beef">80/20 Ground Beef</option>
+              <option value="Cheese">Cheese</option>
+              <option value="Rice">White Rice</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div id="select3" class="selectContainer">
+        <div class="row pt-2">
+          <div class="col-2">
+            <p>Food 3</p>
+          </div>
+          <div class="col-10">
+            <select id="foodSelect3" class="form-control foodSelect">
+              <option value="Eggs">Eggs</option>
+              <option value="Chicken">Chicken Breast</option>
+              <option selected value="Beef">80/20 Ground Beef</option>
+              <option value="Cheese">Cheese</option>
+              <option value="Rice">White Rice</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="row py-3">
+        <button id="addFoodBtn" type="button" class="btn btn-outline-secondary btn-sm btn-block">Add Another Food</button>
+      </div>
+      <div class="row pt-3">
+        <button id="servingsBtn" type="button" class="btn btn-success">Calculate Servings</button>
+      </div>
+    </div>
+    <div id="resultsSection" class="d-none">
+      <hr />
+      <div class="row">
+        <h5>Daily Servings</h5>
+      </div>
     </div>
   </div>
-  <!-- Optional JavaScript -->
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
   <!-- TODO: Replace CDN references with local copies -->
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -54,12 +116,14 @@
   <script type="module">
     // Enable strict mode
     "use strict";
-    import { Food, DailyGoals, calculateServings } from "./main.js";
-    let eggs = new Food("Eggs", 1, 6, 5, 1, 4);
-    let chicken = new Food("Chicken", 0, 9, 1, 1, 18);
-    let beef = new Food("Beef", 0, 7, 5, 1, 18);
-    let cheese = new Food("Cheese", 0, 7, 9, 1, 5);
-    let rice = new Food("Rice", 8, 1, 0, 1, 16);
+    import { Food, FoodTotals, DailyGoals, calculateServings } from "./main.js";
+    import { getFoodSelect, getResultDisplay, getTotalDisplay } from "./elements.js";
+
+    let eggs = new Food("Eggs", "egg(s)", 1, 6, 5, 1, 6);
+    let chicken = new Food("Chicken", "oz", 0, 9, 1, 1, 24);
+    let beef = new Food("Beef", "oz", 0, 7, 5, 1, 24);
+    let cheese = new Food("Cheese", "oz", 0, 7, 9, 1, 8);
+    let rice = new Food("Rice", "oz", 8, 1, 0, 1, 16);
     let foods = [eggs, chicken, beef, cheese, rice];
     let goals = new DailyGoals();
     onLoad();
@@ -67,17 +131,60 @@
     function onLoad() {
       document.getElementById("calculateBtn").addEventListener("click", calculateCals);
       document.getElementById("servingsBtn").addEventListener("click", calcServings);
-      $("#carbs").val("45");
+      document.getElementById("addFoodBtn").addEventListener("click", appendFoodRow);
+      /**$("#carbs").val("45");
       $("#fat").val("140");
       $("#protein").val("250");
-      calculateCals();
+      calculateCals();*/
     }
 
     function calcServings() {
-      let input = foods.map(x => x.clone());
-      let result = calculateServings(input, goals);
-      console.log(result);
-      // TODO: show result
+      // Validate we have some foods selected
+      // TODO: Validate we don't have doubles
+      let $selects = $("select.foodSelect");
+      if ($selects.length < 1) {
+        console.log("No foods selected.");
+        return;
+      }
+      
+      // Just filter out duplicates for now
+      let dedupd = {};
+      let names = $.map($selects, $x => $x.value);
+      names.forEach(x => {
+        let found = foods.some(y => y.name === x);
+        if (found) {
+          dedupd[x] = foods.find(y => y.name === x).clone();
+        } else {
+          // TODO: Handle custom created food in here.
+        }
+      });
+      let input = [];
+      for (const prop in dedupd){
+        input.push(dedupd[prop]);
+      }
+      let results = calculateServings(input, goals);
+      console.log(results);
+      displayResults(results);
+    }
+
+    function displayResults(results) {
+      // remove old display
+      $(".servingDisplay").remove();
+      $(".totalDisplay").remove();
+      let $resultSection = $("#resultsSection");
+      let $elem = $("<div>", { "class": "servingDisplay" });
+      let $totalElem = $("<div>", { "class": "totalDisplay" });
+
+      let display = getResultDisplay(results);
+      let totals = new FoodTotals(results);
+      let totalDisplay = getTotalDisplay(totals, goals);
+      $elem.html(display);
+      $totalElem.html(totalDisplay);
+      $resultSection.append($elem);
+      $resultSection.append($totalElem);
+
+      // Show section
+      $resultSection.removeClass("d-none");
     }
 
     function calculateCals() {
@@ -93,6 +200,21 @@
       goals.protein = prot;
       goals.calories = cals;
       $("#calculatedCals").first().text("Total Calories: " + cals.toString());
+      $("#foodSection").removeClass("d-none");
+    }
+
+    function appendFoodRow() {
+      let $selects = $("select.foodSelect");
+      if ($selects.length > 0) {
+        let id = $selects.length + 1;
+        let $lastSelectDiv = $selects.last().parent().parent().parent();
+        let $newSelect = $("<div>", {id: "select" + id});
+        let newSelectText = getFoodSelect($selects.length + 1);
+        $newSelect.html(newSelectText);
+        $lastSelectDiv.after($newSelect);
+      } else {
+        console.log("Can't find any food selectors! Something's wrong.");
+      }
     }
   </script>
 </body>

@@ -2,8 +2,9 @@
 "use strict";
 
 export class Food {
-  constructor(name, carbsPerServing, proteinPerServing, fatPerServing, minServing, maxServing) {
+  constructor(name, uom, carbsPerServing, proteinPerServing, fatPerServing, minServing, maxServing) {
     this.name = name;
+    this.uom = uom;
     this.carbsPerServing = carbsPerServing;
     this.proteinPerServing = proteinPerServing;
     this.fatPerServing = fatPerServing;
@@ -13,7 +14,7 @@ export class Food {
   }
 
   clone() {
-    let temp = new Food(this.name, this.carbsPerServing, this.proteinPerServing, this.fatPerServing, this.minServing, this.maxServing, this.servings);
+    let temp = new Food(this.name, this.uom, this.carbsPerServing, this.proteinPerServing, this.fatPerServing, this.minServing, this.maxServing, this.servings);
     temp.servings = this.servings;
     return temp;
   }
@@ -28,6 +29,22 @@ export class Food {
   }
   get totalCalories() {
     return this.servings * (4 * this.carbsPerServing + 4 * this.proteinPerServing + 9 * this.fatPerServing);
+  }
+}
+
+export class FoodTotals {
+  constructor(foods) {
+    let sums = foods.reduce((acc, cur) => {
+      acc.totalCarbs += cur.totalCarbs;
+      acc.totalFat += cur.totalFat;
+      acc.totalProtein += cur.totalProtein;
+      acc.totalCalories += cur.totalCalories;
+      return acc;
+    }, { totalCarbs: 0, totalFat: 0, totalCalories: 0, totalProtein: 0 }); 
+    this.totalCarbs = sums.totalCarbs;
+    this.totalFat = sums.totalFat;
+    this.totalProtein = sums.totalProtein;
+    this.totalCalories = sums.totalCalories;
   }
 }
 
@@ -55,7 +72,7 @@ export class Differences {
   get overallDiffScore() {
     // Calories are discounted so they don't dominate diff score
     // TODO: Play with that discount factor
-    return (this.carbDiff * this.carbImportance) + (this.fatDiff * this.fatImportance) + (this.proteinDiff * this.proteinImportance) + (this.calDiff * 0.15 * this.calImportance);
+    return (this.carbDiff * this.carbImportance) + (this.fatDiff * this.fatImportance) + (this.proteinDiff * this.proteinImportance) + (this.calDiff * 0.2 * this.calImportance);
   }
 }
 
@@ -241,10 +258,10 @@ function getDifferences(foods, goals) {
     return acc;
   }, { totalCarbs: 0, totalFat: 0, totalProtein: 0, totalCalories: 0 });
 
-  return new Differences(goals.carbs - totals.totalCarbs,
-    goals.fat - totals.totalFat,
-    goals.protein - totals.totalProtein,
-    goals.calories - totals.totalCalories);
+  return new Differences(Math.abs(goals.carbs - totals.totalCarbs),
+    Math.abs(goals.fat - totals.totalFat),
+    Math.abs(goals.protein - totals.totalProtein),
+    Math.abs(goals.calories - totals.totalCalories));
 }
 
 /**
