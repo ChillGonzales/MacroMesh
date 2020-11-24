@@ -31,13 +31,15 @@
           <label for="protein">Protein (g)</label>
           <input type="number" class="form-control" id="protein" placeholder="Enter protein (g)">
         </div>
+      </div>
+      <div class="row">
         <div class="col-3">
           <p class="lead" id="calculatedCals">Total Calories: </p>
         </div>
       </div>
       <div class="form-group row">
         <div class="col">
-          <button id="calculateBtn" type="submit" class="btn btn-primary">Calculate</button>
+          <button id="calculateBtn" type="submit" class="btn btn-primary">Calculate Calories</button>
         </div>
       </div>
     </div>
@@ -47,12 +49,13 @@
         <h3>Select Foods</h3>
       </div>
       <div id="select1" class="selectContainer">
-        <div class="row pt-3">
+        <div id="foodRow1" class="row pt-3 foodRow">
           <div class="col-2">
-            <p>Food 1</p>
+            <p>Select/create a food</p>
           </div>
-          <div class="col-10">
+          <div class="col-5">
             <select id="foodSelect1" class="form-control foodSelect">
+              <option selected value="">Select a food...</option>
               <option value="Eggs">Eggs</option>
               <option value="Chicken">Chicken Breast</option>
               <option value="Beef">80/20 Ground Beef</option>
@@ -60,64 +63,40 @@
               <option value="Rice">White Rice</option>
             </select>
           </div>
-        </div>
-      </div>
-      <div id="select2" class="selectContainer">
-        <div class="row pt-2">
-          <div class="col-2">
-            <p>Food 2</p>
-          </div>
-          <div class="col-10">
-            <select id="foodSelect2" class="form-control foodSelect">
-              <option value="Eggs">Eggs</option>
-              <option selected value="Chicken">Chicken Breast</option>
-              <option value="Beef">80/20 Ground Beef</option>
-              <option value="Cheese">Cheese</option>
-              <option value="Rice">White Rice</option>
-            </select>
+          <div class="col-3">
+            <button id="create1" type="button" class="btn btn-primary">Create a Food</button>
           </div>
         </div>
-      </div>
-      <div id="select3" class="selectContainer">
-        <div class="row pt-2">
-          <div class="col-2">
-            <p>Food 3</p>
-          </div>
-          <div class="col-10">
-            <select id="foodSelect3" class="form-control foodSelect">
-              <option value="Eggs">Eggs</option>
-              <option value="Chicken">Chicken Breast</option>
-              <option selected value="Beef">80/20 Ground Beef</option>
-              <option value="Cheese">Cheese</option>
-              <option value="Rice">White Rice</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div class="row py-3">
-        <button id="addFoodBtn" type="button" class="btn btn-outline-secondary btn-sm btn-block">Add Another Food</button>
-      </div>
-      <div class="row pt-3">
-        <button id="servingsBtn" type="button" class="btn btn-success">Calculate Servings</button>
       </div>
     </div>
-    <div id="resultsSection" class="d-none">
-      <hr />
-      <div class="row">
-        <h5>Daily Servings</h5>
-      </div>
+    <div class="row py-3">
+      <button id="addFoodBtn" type="button" class="btn btn-outline-secondary btn-sm btn-block">Add Another Food</button>
     </div>
+    <div class="row pt-3">
+      <button id="servingsBtn" type="button" class="btn btn-success">Calculate Servings</button>
+    </div>
+  </div>
+  <div id="resultsSection" class="d-none">
+    <hr />
+    <div class="row">
+      <h5>Daily Servings</h5>
+    </div>
+  </div>
   </div>
 
   <!-- TODO: Replace CDN references with local copies -->
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
   <script src="vendor/bootstrap-4.0.0/dist/js/bootstrap.min.js"></script>
   <script type="module">
     // Enable strict mode
     "use strict";
     import { Food, FoodTotals, DailyGoals, calculateServings } from "./main.js";
-    import { getFoodSelect, getResultDisplay, getTotalDisplay } from "./elements.js";
+    import { getFoodSelect, getResultDisplay, getTotalDisplay, getCustomFoodEditorRow } from "./elements.js";
 
     let eggs = new Food("Eggs", "egg(s)", 1, 6, 5, 1, 6);
     let chicken = new Food("Chicken", "oz", 0, 9, 1, 1, 24);
@@ -132,10 +111,48 @@
       document.getElementById("calculateBtn").addEventListener("click", calculateCals);
       document.getElementById("servingsBtn").addEventListener("click", calcServings);
       document.getElementById("addFoodBtn").addEventListener("click", appendFoodRow);
-      /**$("#carbs").val("45");
+      document.getElementById("create1").addEventListener("click", () => onCreateFoodClick("1"));
+      appendFoodRow();
+      appendFoodRow();
+
+      // TODO: Remove, testing
+      $("#carbs").val("45");
       $("#fat").val("140");
       $("#protein").val("250");
-      calculateCals();*/
+      calculateCals();
+    }
+
+    function onCreateFoodClick(rowIndex) {
+      let $selectDiv = $("#select" + rowIndex);
+      if ($selectDiv.length > 0) {
+        $selectDiv.replaceWith(getCustomFoodEditorRow(rowIndex));
+        let doc = document.getElementById("saveFood" + rowIndex);
+        document.getElementById("saveFood" + rowIndex).addEventListener("click", () => onSaveFood(rowIndex));
+        document.getElementById("clearFood" + rowIndex).addEventListener("click", () => onClearFood(rowIndex));
+      }
+    }
+
+    function onSaveFood(rowIndex) {
+      let name = $("#nameInput" + rowIndex).val();
+      let uom = $("#uomInput" + rowIndex).val();
+      let carbs = parseInt($("#carbInput" + rowIndex).val());
+      let fat = parseInt($("#fatInput" + rowIndex).val());
+      let protein = parseInt($("#proteinInput" + rowIndex).val());
+      if (!name || !uom || !carbs || !fat || !protein) {
+        return;
+      }
+      foods.push(new Food(name, uom, carbs, fat, protein));
+      // TODO: Replace with a new view of added food
+    }
+
+    function onClearFood(rowIndex) {
+      let $selectDiv = $("#select" + rowIndex);
+      if ($selectDiv.length < 1) {
+        return;
+      }
+
+      $selectDiv.replaceWith(getFoodSelect(rowIndex));
+      document.getElementById("create" + rowIndex).addEventListener("click", () => onCreateFoodClick(rowIndex));
     }
 
     function calcServings() {
@@ -146,7 +163,7 @@
         console.log("No foods selected.");
         return;
       }
-      
+
       // Just filter out duplicates for now
       let dedupd = {};
       let names = $.map($selects, $x => $x.value);
@@ -159,7 +176,7 @@
         }
       });
       let input = [];
-      for (const prop in dedupd){
+      for (const prop in dedupd) {
         input.push(dedupd[prop]);
       }
       let results = calculateServings(input, goals);
@@ -208,14 +225,16 @@
       if ($selects.length > 0) {
         let id = $selects.length + 1;
         let $lastSelectDiv = $selects.last().parent().parent().parent();
-        let $newSelect = $("<div>", {id: "select" + id});
+        let $newSelect = $("<div>", { id: "select" + id });
         let newSelectText = getFoodSelect($selects.length + 1);
         $newSelect.html(newSelectText);
         $lastSelectDiv.after($newSelect);
+        document.getElementById("create" + id).addEventListener("click", () => onCreateFoodClick(id));
       } else {
         console.log("Can't find any food selectors! Something's wrong.");
       }
     }
   </script>
 </body>
+
 </html>

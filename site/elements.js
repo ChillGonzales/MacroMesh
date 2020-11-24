@@ -4,16 +4,48 @@ export function getFoodSelect(index) {
   return `
     <div class="row pt-2">
       <div class="col-2">
-        <p>Food ${index}</p>
+        <p>Select/create a food</p>
       </div>
-      <div class="col-10">
+      <div class="col-5">
         <select id="foodSelect${index}" class="form-control foodSelect">
+          <option selected value="">Select a food...</option>
           <option value="Eggs">Eggs</option>
           <option value="Chicken">Chicken Breast</option>
           <option value="Beef">80/20 Ground Beef</option>
           <option value="Cheese">Cheese</option>
           <option value="Rice">White Rice</option>
         </select>
+      </div>
+      <div class="col-3">
+        <button id="create${index}" type="button" class="btn btn-primary">Create a Food</button>
+      </div>
+    </div>
+  `;
+}
+
+export function getCustomFoodEditorRow(index) {
+  return `
+    <div id="select${index}" class="selectContainer">
+      <div id="foodRow${index}" class="row pt-3 foodRow">
+        <div class="col">
+          <input type="text" class="form-control" id="nameInput${index}" placeholder="Enter food name" />
+        </div>
+        <div class="col">
+          <input type="text" class="form-control" id="uomInput${index}" placeholder="Enter servings unit" />
+        </div>
+        <div class="col">
+          <input type="number" class="form-control" id="carbsInput${index}" placeholder="Enter carbs (g)" />
+        </div>
+        <div class="col">
+          <input type="number" class="form-control" id="fatInput${index}" placeholder="Enter fat (g)" />
+        </div>
+        <div class="col">
+          <input type="number" class="form-control" id="proteinInput${index}" placeholder="Enter protein (g)" />
+        </div>
+        <div class="col">
+          <button type="button" class="btn btn-success btn-sm" id="saveFood${index}">Save</button>
+          <button type="button" class="btn btn-danger btn-sm" id="clearFood${index}">Back</button>
+        </div>
       </div>
     </div>
   `;
