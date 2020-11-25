@@ -2,22 +2,24 @@
 
 export function getFoodSelect(index) {
   return `
-    <div class="row pt-2">
-      <div class="col-2">
-        <p>Select/create a food</p>
-      </div>
-      <div class="col-5">
-        <select id="foodSelect${index}" class="form-control foodSelect">
-          <option selected value="">Select a food...</option>
-          <option value="Eggs">Eggs</option>
-          <option value="Chicken">Chicken Breast</option>
-          <option value="Beef">80/20 Ground Beef</option>
-          <option value="Cheese">Cheese</option>
-          <option value="Rice">White Rice</option>
-        </select>
-      </div>
-      <div class="col-3">
-        <button id="create${index}" type="button" class="btn btn-primary">Create a Food</button>
+    <div id="select${index}">
+      <div class="row pt-2">
+        <div class="col-2">
+          <p>Select/create a food</p>
+        </div>
+        <div class="col-5">
+          <select id="foodSelect${index}" class="form-control foodSelect">
+            <option selected value="">Select a food...</option>
+            <option value="Eggs">Eggs</option>
+            <option value="Chicken">Chicken Breast</option>
+            <option value="Beef">80/20 Ground Beef</option>
+            <option value="Cheese">Cheese</option>
+            <option value="Rice">White Rice</option>
+          </select>
+        </div>
+        <div class="col-3">
+          <button id="create${index}" type="button" class="btn btn-primary">Create a Food</button>
+        </div>
       </div>
     </div>
   `;
@@ -114,15 +116,14 @@ export function getTotalDisplay(totals, goals) {
         </tr>
         <tr>
           <td>Protein</td>
-          <td>${goals.protein}g</td>
           <td>${totals.totalProtein}g</td>
+          <td>${goals.protein}g</td>
           <td>${errorPct(totals.totalProtein, goals.protein)}</td>
-          <td></td>
         </tr>
         <tr>
           <td>Calories</td>
-          <td>${goals.calories}</td>
           <td>${totals.totalCalories}</td>
+          <td>${goals.calories}</td>
           <td>${errorPct(totals.totalCalories, goals.calories)}</td>
         </tr>
       </tbody>

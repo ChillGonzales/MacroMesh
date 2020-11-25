@@ -75,13 +75,12 @@
     <div class="row pt-3">
       <button id="servingsBtn" type="button" class="btn btn-success">Calculate Servings</button>
     </div>
-  </div>
-  <div id="resultsSection" class="d-none">
-    <hr />
-    <div class="row">
-      <h5>Daily Servings</h5>
+    <div id="resultsSection" class="d-none">
+      <hr />
+      <div class="row">
+        <h5>Daily Servings</h5>
+      </div>
     </div>
-  </div>
   </div>
 
   <!-- TODO: Replace CDN references with local copies -->
@@ -152,7 +151,9 @@
       }
 
       $selectDiv.replaceWith(getFoodSelect(rowIndex));
-      document.getElementById("create" + rowIndex).addEventListener("click", () => onCreateFoodClick(rowIndex));
+      var newElem = document.getElementById("create" + rowIndex);
+      newElem.addEventListener("click", () => onCreateFoodClick(rowIndex));
+      //document.getElementById("create" + rowIndex).addEventListener("click", () => onCreateFoodClick(rowIndex));
     }
 
     function calcServings() {
