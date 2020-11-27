@@ -18,7 +18,8 @@ export function getFoodSelect(index) {
           </select>
         </div>
         <div class="col-3">
-          <button id="create${index}" type="button" class="btn btn-primary">Create a Food</button>
+          <button id="create${index}" type="button" class="btn btn-secondary">Create a Food</button>
+          <button id="remove${index}" type="button" class="btn btn-danger">Remove</button>
         </div>
       </div>
     </div>
@@ -36,7 +37,7 @@ export function getCustomFoodEditorRow(index) {
           <input type="text" class="form-control" id="uomInput${index}" placeholder="Enter servings unit" />
         </div>
         <div class="col">
-          <input type="number" class="form-control" id="carbsInput${index}" placeholder="Enter carbs (g)" />
+          <input type="number" class="form-control" id="carbInput${index}" placeholder="Enter carbs (g)" />
         </div>
         <div class="col">
           <input type="number" class="form-control" id="fatInput${index}" placeholder="Enter fat (g)" />
@@ -47,6 +48,36 @@ export function getCustomFoodEditorRow(index) {
         <div class="col">
           <button type="button" class="btn btn-success btn-sm" id="saveFood${index}">Save</button>
           <button type="button" class="btn btn-danger btn-sm" id="clearFood${index}">Back</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+export function getCreatedFoodRow(index, food) {
+  return `
+    <div id="select${index}">
+      <div class="row pt-2">
+        <div class="col-3">
+          <p class="customFoodName" id="createdName${index}"><span class="badge badge-primary">created</span> <strong>${food.name}</strong></p>
+        </div>
+        <div class="col">
+          <p class="">Serving: 1 ${food.uom}</p>
+        </div>
+        <div class="col">
+          <p>Carbs: ${food.carbsPerServing}g</p>
+        </div>
+        <div class="col">
+          <p>Fat: ${food.fatPerServing}g</p>
+        </div>
+        <div class="col">
+          <p>Protein: ${food.proteinPerServing}g</p>
+        </div>
+        <div class="col">
+          <p>Calories: ${food.caloriesPerServing}</p>
+        </div>
+        <div class="col">
+          <button id="remove${index}" type="button" class="btn btn-danger">Remove</button>
         </div>
       </div>
     </div>

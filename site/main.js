@@ -2,7 +2,7 @@
 "use strict";
 
 export class Food {
-  constructor(name, uom, carbsPerServing, proteinPerServing, fatPerServing, minServing, maxServing) {
+  constructor(name, uom, carbsPerServing, proteinPerServing, fatPerServing, minServing = 1, maxServing = 99) {
     this.name = name;
     this.uom = uom;
     this.carbsPerServing = carbsPerServing;
@@ -29,6 +29,9 @@ export class Food {
   }
   get totalCalories() {
     return this.servings * (4 * this.carbsPerServing + 4 * this.proteinPerServing + 9 * this.fatPerServing);
+  }
+  get caloriesPerServing() {
+    return (this.carbsPerServing * 4) + (this.proteinPerServing * 4) + (this.fatPerServing * 9);
   }
 }
 
@@ -84,7 +87,7 @@ export class Differences {
  */
 export function calculateServings(foods, goals) {
   // TODO: Might need higher than 50 iteration cap
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < 1000; i++) {
     let diffs = getDifferences(foods, goals);
 
     if (diffsWithinTolerance(diffs)) {
@@ -129,10 +132,10 @@ function printSummary(foods, goals) {
  * @return {boolean} True if the diffs are within tolerance
  */
 function diffsWithinTolerance(diffs) {
-  return diffs.carbDiff < 10 && 
-         diffs.fatDiff < 10 &&
-         diffs.proteinDiff < 10 &&
-         diffs.calDiff < 100;
+  return diffs.carbDiff < 3 && 
+         diffs.fatDiff < 3 &&
+         diffs.proteinDiff < 3 &&
+         diffs.calDiff < 50;
 }
 
 /**
@@ -146,7 +149,7 @@ function getPossibleChanges(foods) {
 
   // 0 or 1 for now
   // We can do base 3 now? HYPE.
-  let numberOfChoices = 2;
+  let numberOfChoices = 3;
   let count = foods.length;
   // This is how you compute the possibilities of 2 choices for x number of foods. 2^x
   let numPossibilities = Math.pow(numberOfChoices, count);
@@ -169,7 +172,12 @@ function getPossibleChanges(foods) {
     // Here we're using the values in the base 2 or 3 representation to correspond to the value of each food.
     // This should build us a full possibility space.
     for (let i = 0; i < count; i++) {
-      change[foods[i].name] = parseInt(chars[i].toString());
+      let intRep = parseInt(chars[i].toString());
+      if (intRep === 2) {
+        // We want a base 3 '2' to represent a -1 change in our scheme
+        intRep = -1;
+      }
+      change[foods[i].name] = intRep;
     }
     if (isValidChange(foods, change)) {
       list.push(change);

@@ -9,13 +9,29 @@
 
   <!--Bootstrap CSS-->
   <link rel="stylesheet" href="vendor/bootstrap-4.0.0/dist/css/bootstrap.min.css">
+  <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />-->
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">
+      Macro Mesh
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mr-sm-2">
+        <!-- <li class="nav-item">
+          <a class="nav-link" href="#">Contact Us</a>
+        </li> -->
+      </ul>
+    </div>
+  </nav>
   <div class="container mt-5">
     <div class="row">
-      <h3>Enter Macro Goals Below</h3>
+      <h3>Enter Daily Macro Goals</h3>
     </div>
     <div class="form">
       <div class="form-group row">
@@ -39,7 +55,9 @@
       </div>
       <div class="form-group row">
         <div class="col">
-          <button id="calculateBtn" type="submit" class="btn btn-primary">Calculate Calories</button>
+          <button data-toggle="tooltip" data-placement="right" data-html="true" 
+            title="Calculates calories from macros. <b>If you change your macros after calculating, you must recalculate for the changes to take effect.</b>" 
+            id="calculateBtn" type="submit" class="btn btn-primary">Calculate Calories</button>
         </div>
       </div>
     </div>
@@ -48,29 +66,11 @@
       <div class="row">
         <h3>Select Foods</h3>
       </div>
-      <div id="select1" class="selectContainer">
-        <div id="foodRow1" class="row pt-3 foodRow">
-          <div class="col-2">
-            <p>Select/create a food</p>
-          </div>
-          <div class="col-5">
-            <select id="foodSelect1" class="form-control foodSelect">
-              <option selected value="">Select a food...</option>
-              <option value="Eggs">Eggs</option>
-              <option value="Chicken">Chicken Breast</option>
-              <option value="Beef">80/20 Ground Beef</option>
-              <option value="Cheese">Cheese</option>
-              <option value="Rice">White Rice</option>
-            </select>
-          </div>
-          <div class="col-3">
-            <button id="create1" type="button" class="btn btn-primary">Create a Food</button>
-          </div>
-        </div>
-      </div>
     </div>
     <div class="row py-3">
-      <button id="addFoodBtn" type="button" class="btn btn-outline-secondary btn-sm btn-block">Add Another Food</button>
+      <div class="col">
+        <button id="addFoodBtn" type="button" class="btn btn-outline-secondary btn-sm btn-block">Add Another Food</button>
+      </div>
     </div>
     <div class="row pt-3">
       <button id="servingsBtn" type="button" class="btn btn-success">Calculate Servings</button>
@@ -91,11 +91,12 @@
     integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
     crossorigin="anonymous"></script>
   <script src="vendor/bootstrap-4.0.0/dist/js/bootstrap.min.js"></script>
+  <!--<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>-->
   <script type="module">
     // Enable strict mode
     "use strict";
     import { Food, FoodTotals, DailyGoals, calculateServings } from "./main.js";
-    import { getFoodSelect, getResultDisplay, getTotalDisplay, getCustomFoodEditorRow } from "./elements.js";
+    import { getFoodSelect, getResultDisplay, getTotalDisplay, getCustomFoodEditorRow, getCreatedFoodRow } from "./elements.js";
 
     let eggs = new Food("Eggs", "egg(s)", 1, 6, 5, 1, 6);
     let chicken = new Food("Chicken", "oz", 0, 9, 1, 1, 24);
@@ -107,10 +108,14 @@
     onLoad();
 
     function onLoad() {
+      // This activates all bootstrap tooltips on the page
+      $(() => $('[data-toggle="tooltip"]').tooltip());
+      // This activates bootstrap picker (for searchable select menus)
+      //$(() => $('.selectpicker').selectpicker());
       document.getElementById("calculateBtn").addEventListener("click", calculateCals);
       document.getElementById("servingsBtn").addEventListener("click", calcServings);
       document.getElementById("addFoodBtn").addEventListener("click", appendFoodRow);
-      document.getElementById("create1").addEventListener("click", () => onCreateFoodClick("1"));
+      appendFoodRow();
       appendFoodRow();
       appendFoodRow();
 
@@ -131,6 +136,13 @@
       }
     }
 
+    function onRemoveFoodClick(rowIndex) {
+      let $selectDiv = $("#select" + rowIndex);
+      if ($selectDiv.length > 0) {
+        $selectDiv.remove();
+      }
+    }
+
     function onSaveFood(rowIndex) {
       let name = $("#nameInput" + rowIndex).val();
       let uom = $("#uomInput" + rowIndex).val();
@@ -140,8 +152,13 @@
       if (!name || !uom || !carbs || !fat || !protein) {
         return;
       }
-      foods.push(new Food(name, uom, carbs, fat, protein));
-      // TODO: Replace with a new view of added food
+      let food = new Food(name, uom, carbs, protein, fat);
+      foods.push(food);
+
+      let $selectDiv = $("#select" + rowIndex);
+      let createdText = getCreatedFoodRow(rowIndex, food);
+      $selectDiv.replaceWith($(createdText));
+      let newElem = document.getElementById("remove" + rowIndex).addEventListener("click", () => onRemoveFoodClick(rowIndex));
     }
 
     function onClearFood(rowIndex) {
@@ -157,17 +174,16 @@
     }
 
     function calcServings() {
-      // Validate we have some foods selected
-      // TODO: Validate we don't have doubles
+      // Grab the preselected foods
       let $selects = $("select.foodSelect");
-      if ($selects.length < 1) {
-        console.log("No foods selected.");
-        return;
-      }
+
+      // Grab all custom foods
+      let $customs = $("p.customFoodName > strong");
 
       // Just filter out duplicates for now
       let dedupd = {};
       let names = $.map($selects, $x => $x.value);
+      names.push(...$.map($customs, $x => $x.innerText));
       names.forEach(x => {
         let found = foods.some(y => y.name === x);
         if (found) {
@@ -223,17 +239,27 @@
 
     function appendFoodRow() {
       let $selects = $("select.foodSelect");
+      let id = 0;
       if ($selects.length > 0) {
-        let id = $selects.length + 1;
+        // Append a row
+        id = $selects.length + 1;
         let $lastSelectDiv = $selects.last().parent().parent().parent();
-        let $newSelect = $("<div>", { id: "select" + id });
-        let newSelectText = getFoodSelect($selects.length + 1);
-        $newSelect.html(newSelectText);
+        let newSelectText = getFoodSelect(id);
+        let $newSelect = $(newSelectText);
         $lastSelectDiv.after($newSelect);
-        document.getElementById("create" + id).addEventListener("click", () => onCreateFoodClick(id));
       } else {
-        console.log("Can't find any food selectors! Something's wrong.");
+        // Handle the case of no rows existing yet
+        id = 1;
+        let newSelectText = getFoodSelect(id);
+        let $newSelect = $(newSelectText);
+        let $foodSection = $("#foodSection");
+        if ($foodSection.length > 0) {
+          $foodSection.append($newSelect);
+        }
       }
+      // Add event handlers
+      document.getElementById("create" + id).addEventListener("click", () => onCreateFoodClick(id));
+      document.getElementById("remove" + id).addEventListener("click", () => onRemoveFoodClick(id));
     }
   </script>
 </body>
