@@ -2,12 +2,9 @@
 
 export function getFoodSelect(index) {
   return `
-    <div id="select${index}">
+    <div id="select${index}" class="card card-body">
       <div class="row pt-2">
-        <div class="col-2">
-          <p>Select/create a food</p>
-        </div>
-        <div class="col-5">
+        <div class="col-lg-5 col-sm-12">
           <select id="foodSelect${index}" class="form-control foodSelect">
             <option selected value="">Select a food...</option>
             <option value="Eggs">Eggs</option>
@@ -17,7 +14,10 @@ export function getFoodSelect(index) {
             <option value="Rice">White Rice</option>
           </select>
         </div>
-        <div class="col-3">
+        <div class="col-lg-1 col-sm-12">
+          <p>or</p>
+        </div>
+        <div class="col-lg-3 col-sm-12">
           <button id="create${index}" type="button" class="btn btn-secondary">Create a Food</button>
           <button id="remove${index}" type="button" class="btn btn-danger">Remove</button>
         </div>
@@ -29,25 +29,30 @@ export function getFoodSelect(index) {
 export function getCustomFoodEditorRow(index) {
   return `
     <div id="select${index}" class="selectContainer">
-      <div id="foodRow${index}" class="row pt-3 foodRow">
-        <div class="col">
+      <div id="foodRow${index}" class="form-row pt-3 foodRow">
+        <div class="form-group col-lg-4 col-sm-12">
+          <label for="nameInput${index}">Name</label>
           <input type="text" class="form-control" id="nameInput${index}" placeholder="Enter food name" />
         </div>
-        <div class="col">
+        <div class="form-group col-lg-4 col-sm-12">
+          <label for="uomInput${index}">Servings Unit</label>
           <input type="text" class="form-control" id="uomInput${index}" placeholder="Enter servings unit" />
         </div>
-        <div class="col">
+        <div class="form-group col-lg-4 col-sm-12">
+          <label for="carbInput${index}">Carbs (g)</label>
           <input type="number" class="form-control" id="carbInput${index}" placeholder="Enter carbs (g)" />
         </div>
-        <div class="col">
+        <div class="form-group col-lg-4 col-sm-12">
+          <label for="fatInput${index}">Fat (g)</label>
           <input type="number" class="form-control" id="fatInput${index}" placeholder="Enter fat (g)" />
         </div>
-        <div class="col">
+        <div class="form-group col-lg-4 col-sm-12">
+          <label for="proteinInput${index}">Protein (g)</label>
           <input type="number" class="form-control" id="proteinInput${index}" placeholder="Enter protein (g)" />
         </div>
-        <div class="col">
-          <button type="button" class="btn btn-success btn-sm" id="saveFood${index}">Save</button>
-          <button type="button" class="btn btn-danger btn-sm" id="clearFood${index}">Back</button>
+        <div class="form-group col-lg-12 col-sm-12">
+          <button type="button" class="btn btn-success" id="saveFood${index}">Save Food</button>
+          <button type="button" class="btn btn-danger" id="clearFood${index}">Back</button>
         </div>
       </div>
     </div>
@@ -99,70 +104,76 @@ export function getResultDisplay(foods) {
     `;
   });
   return `
-  <table class="table table-bordered table-hover">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Servings</th>
-        <th>Carbs</th>
-        <th>Fat</th>
-        <th>Protein</th>
-        <th>Calories</th>
-      </tr>
-    </thead>  
-    <tbody>
-      ${rows}
-    </tbody>
-  </table>
+  <div class="col">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Servings</th>
+          <th>Carbs</th>
+          <th>Fat</th>
+          <th>Protein</th>
+          <th>Calories</th>
+        </tr>
+      </thead>  
+      <tbody>
+        ${rows}
+      </tbody>
+    </table>
+  </div>
 `;
 }
 
 export function getTotalDisplay(totals, goals) {
   return `
-    <br />
-    <div class="row">
-      <h5>Totals</h5>
+    <div class="col">
+      <br />
+      <div class="row">
+        <div class="col">
+          <h5>Totals</h5>
+        </div>
+      </div>
+      <table class="table table-hover table-bordered">
+        <thead>
+          <tr>
+            <th>Macro</th>
+            <th>Calculated</th>
+            <th>Goal</th>
+            <th>Error %</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Carbs</td>
+            <td>${totals.totalCarbs}g</td>
+            <td>${goals.carbs}g</td>
+            <td>${errorCalc(totals.totalCarbs, goals.carbs)}</td>
+          </tr>
+          <tr>
+            <td>Fat</td>
+            <td>${totals.totalFat}g</td>
+            <td>${goals.fat}g</td>
+            <td>${errorCalc(totals.totalFat, goals.fat)}</td>
+          </tr>
+          <tr>
+            <td>Protein</td>
+            <td>${totals.totalProtein}g</td>
+            <td>${goals.protein}g</td>
+            <td>${errorCalc(totals.totalProtein, goals.protein)}</td>
+          </tr>
+          <tr>
+            <td>Calories</td>
+            <td>${totals.totalCalories}</td>
+            <td>${goals.calories}</td>
+            <td>${errorCalc(totals.totalCalories, goals.calories)}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <table class="table table-hover table-bordered">
-      <thead>
-        <tr>
-          <th>Macro</th>
-          <th>Calculated</th>
-          <th>Goal</th>
-          <th>Error %</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Carbs</td>
-          <td>${totals.totalCarbs}g</td>
-          <td>${goals.carbs}g</td>
-          <td>${errorPct(totals.totalCarbs, goals.carbs)}</td>
-        </tr>
-        <tr>
-          <td>Fat</td>
-          <td>${totals.totalFat}g</td>
-          <td>${goals.fat}g</td>
-          <td>${errorPct(totals.totalFat, goals.fat)}</td>
-        </tr>
-        <tr>
-          <td>Protein</td>
-          <td>${totals.totalProtein}g</td>
-          <td>${goals.protein}g</td>
-          <td>${errorPct(totals.totalProtein, goals.protein)}</td>
-        </tr>
-        <tr>
-          <td>Calories</td>
-          <td>${totals.totalCalories}</td>
-          <td>${goals.calories}</td>
-          <td>${errorPct(totals.totalCalories, goals.calories)}</td>
-        </tr>
-      </tbody>
-    </table>
   `;
 }
 
-function errorPct(calculated, expected) {
+function errorCalc(calculated, expected) {
   return 100 * (Math.abs(calculated - expected) / expected);
 }
 
