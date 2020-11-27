@@ -2,6 +2,15 @@
 <html lang="en">
 
 <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-N5YWZJW0FF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-N5YWZJW0FF');
+  </script>
   <title>Macro Meal Plan Builder</title>
   <!--Required meta tags-->
   <meta chaset="utf-8">
@@ -63,17 +72,17 @@
     </div>
     <div id="foodSection" class="d-none">
       <hr />
-      <div class="row">
+      <div id="foodSectionHeader" class="row">
         <h3>Select Foods</h3>
       </div>
-    </div>
-    <div class="row py-3">
-      <div class="col">
-        <button id="addFoodBtn" type="button" class="btn btn-outline-secondary btn-sm btn-block">Add Another Food</button>
+      <div class="row py-3">
+        <div class="col">
+          <button id="addFoodBtn" type="button" class="btn btn-outline-secondary btn-sm btn-block">Add Another Food</button>
+        </div>
       </div>
-    </div>
-    <div class="row pt-3">
-      <button id="servingsBtn" type="button" class="btn btn-success">Calculate Servings</button>
+      <div class="row pt-3">
+        <button id="servingsBtn" type="button" class="btn btn-success">Calculate Servings</button>
+      </div>
     </div>
     <div id="resultsSection" class="d-none">
       <hr />
@@ -246,9 +255,9 @@
         id = 1;
         let newSelectText = getFoodSelect(id);
         let $newSelect = $(newSelectText);
-        let $foodSection = $("#foodSection");
-        if ($foodSection.length > 0) {
-          $foodSection.append($newSelect);
+        let $foodSectionHeader = $("#foodSectionHeader");
+        if ($foodSectionHeader.length > 0) {
+          $foodSectionHeader.after($newSelect);
         }
       }
       // Add event handlers
