@@ -242,7 +242,7 @@
       // remove old display
       $(".servingDisplay").remove();
       $(".totalDisplay").remove();
-      let $resultSection = $("#resultsSection");
+      let $resultSection = $("#resultsSection > .col");
       let $elem = $("<div>", { "class": "servingDisplay row" });
       let $totalElem = $("<div>", { "class": "totalDisplay row" });
 
@@ -255,7 +255,7 @@
       $resultSection.append($totalElem);
 
       // Show section
-      $resultSection.removeClass("d-none");
+      $resultSection.parent().removeClass("d-none");
     }
 
     function calculateCals() {

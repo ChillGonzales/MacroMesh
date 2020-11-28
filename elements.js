@@ -125,6 +125,10 @@ export function getResultDisplay(foods) {
 }
 
 export function getTotalDisplay(totals, goals) {
+  let carbDisplay = errorDisplay(totals.totalCarbs, goals.carbs);
+  let fatDisplay = errorDisplay(totals.totalFat, goals.fat);
+  let proteinDisplay = errorDisplay(totals.totalProtein, goals.protein);
+  let calorieDisplay = errorDisplay(totals.totalCalories, goals.calories, 50, 100);
   return `
     <div class="col">
       <br />
@@ -139,7 +143,7 @@ export function getTotalDisplay(totals, goals) {
             <th>Macro</th>
             <th>Calculated</th>
             <th>Goal</th>
-            <th>Error %</th>
+            <th>Difference</th>
           </tr>
         </thead>
         <tbody>
@@ -147,25 +151,25 @@ export function getTotalDisplay(totals, goals) {
             <td>Carbs</td>
             <td>${totals.totalCarbs}g</td>
             <td>${goals.carbs}g</td>
-            <td>${errorCalc(totals.totalCarbs, goals.carbs)}</td>
+            <td class="${carbDisplay.class}">${carbDisplay.diffDisplay}</td>
           </tr>
           <tr>
             <td>Fat</td>
             <td>${totals.totalFat}g</td>
             <td>${goals.fat}g</td>
-            <td>${errorCalc(totals.totalFat, goals.fat)}</td>
+            <td class="${fatDisplay.class}">${fatDisplay.diffDisplay}</td>
           </tr>
           <tr>
             <td>Protein</td>
             <td>${totals.totalProtein}g</td>
             <td>${goals.protein}g</td>
-            <td>${errorCalc(totals.totalProtein, goals.protein)}</td>
+            <td class="${proteinDisplay.class}">${proteinDisplay.diffDisplay}</td>
           </tr>
           <tr>
             <td>Calories</td>
             <td>${totals.totalCalories}</td>
             <td>${goals.calories}</td>
-            <td>${errorCalc(totals.totalCalories, goals.calories)}</td>
+            <td class="${calorieDisplay.class}">${calorieDisplay.diffDisplay}</td>
           </tr>
         </tbody>
       </table>
@@ -173,8 +177,22 @@ export function getTotalDisplay(totals, goals) {
   `;
 }
 
-function errorCalc(calculated, expected) {
-  return 100 * (Math.abs(calculated - expected) / expected);
+function errorDisplay(calculated, expected, warningBound = 3, dangerBound = 6) {
+  let display = { diffDisplay: "", "class": "" };
+  let diff = calculated - expected;
+  if (diff <= 0) {
+    display.diffDisplay = diff.toString();
+  } else {
+    display.diffDisplay = "+" + diff;
+  }
+  if (Math.abs(diff) <= warningBound) {
+    display.class = "table-success";
+  } else if (Math.abs(diff) <= dangerBound) {
+    display.class = "table-warning";
+  } else {
+    display.class = "table-danger";
+  }
+  return display;
 }
 
 // export function getResultDisplay(food) {
