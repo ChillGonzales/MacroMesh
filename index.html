@@ -6,20 +6,24 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-N5YWZJW0FF"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
 
     gtag('config', 'G-N5YWZJW0FF');
   </script>
+
   <!-- Crisp chat bot -->
-  <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="d8568dc2-773d-4a02-9b80-ec8f00e37863";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
+  <script
+    type="text/javascript">window.$crisp = []; window.CRISP_WEBSITE_ID = "d8568dc2-773d-4a02-9b80-ec8f00e37863"; (function () { d = document; s = d.createElement("script"); s.src = "https://client.crisp.chat/l.js"; s.async = 1; d.getElementsByTagName("head")[0].appendChild(s); })();</script>
   <title>Macro Meal Plan Builder</title>
+
   <!-- Required meta tags -->
   <meta chaset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="vendor/bootstrap-4.0.0/dist/css/bootstrap.min.css">
+
   <!-- Montserrat font -->
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
@@ -29,22 +33,42 @@
 
 <body>
   <!-- Uncomment when I actually have other menu items -->
-  <!--<nav class="navbar navbar-expand-lg navbar-dark bg-dark">-->
-  <nav class="navbar navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="#">
       Macro Mesh
     </a>
-    <!--<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
-    </button>-->
+    </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav mr-sm-2">
-        <!-- <li class="nav-item">
-          <a class="nav-link" href="#">Contact Us</a>
-        </li> -->
+        <li class="nav-item">
+          <a class="nav-link" href="#" data-toggle="modal" data-target="#requestFeatureModal">Request a Feature</a>
+        </li>
       </ul>
     </div>
   </nav>
+  <!-- Modal -->
+  <div class="modal fade" id="requestFeatureModal" tabindex="-1" role="dialog" aria-labelledby="requestFeatureModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="requestFeatureModalLabel">Requesting a Feature</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>To request a new feature, please use the chat button in the bottom right corner of your screen. This allows you to send a message directly to me, the developer!</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="container my-2">
     <div class="row">
       <div class="col">
@@ -74,11 +98,8 @@
       <div class="form-group row">
         <div class="col">
           <button id="calculateBtn" type="submit" class="btn btn-primary">Calculate Calories</button>
-          <i data-toggle="tooltip" 
-            data-html="true" 
-            data-trigger="hover" 
-            data-placement="bottom" 
-            title="Calculates your calories from your macro goals. <b>If you change your macros after calculating, you must recalculate for the changes to take effect.</b>" 
+          <i data-toggle="tooltip" data-html="true" data-trigger="hover" data-placement="bottom"
+            title="Calculates your calories from your macro goals. <b>If you change your macros after calculating, you must recalculate for the changes to take effect.</b>"
             class="fas fa-lg fa-info-circle text-dark"></i>
         </div>
       </div>
@@ -87,20 +108,18 @@
       <div class="col">
         <hr />
         <div id="foodSectionHeader" class="row">
-            <div class="col">
-              <h3>Select Foods
-                <i data-toggle="tooltip" 
-                  data-html="true" 
-                  data-trigger="hover" 
-                  data-placement="bottom" 
-                  title="Select the foods you want to eat in a day. Choose from the available options or create your own."
-                  class="fas fa-xs fa-info-circle text-dark"></i>
-              </h3>
+          <div class="col">
+            <h3>Select Foods
+              <i data-toggle="tooltip" data-html="true" data-trigger="hover" data-placement="bottom"
+                title="Select the foods you want to eat in a day. Choose from the available options or create your own."
+                class="fas fa-xs fa-info-circle text-dark"></i>
+            </h3>
           </div>
         </div>
         <div class="row py-3">
           <div class="col">
-            <button id="addFoodBtn" type="button" class="btn btn-outline-secondary btn-sm btn-block">Add Another Food</button>
+            <button id="addFoodBtn" type="button" class="btn btn-outline-secondary btn-sm btn-block">Add Another
+              Food</button>
           </div>
         </div>
         <div class="row pt-3">
