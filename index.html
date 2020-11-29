@@ -303,9 +303,15 @@
     }
 
     function replaceHistory(newAction) {
+      let path = `#${newAction}`;
       if (window.history.replaceState) {
-        window.history.replaceState({}, null, `?action=${newAction}`);
+        window.history.replaceState({}, null, path);
       }
+      // Send updated URL
+      gtag("config", "G-N5YWZJW0FF", {
+        "page_title" : newAction,
+        "page_path": path
+     });
     }
 
     function appendFoodRow() {
