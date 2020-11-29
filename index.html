@@ -177,12 +177,15 @@
       appendFoodRow();
       appendFoodRow();
       appendFoodRow();
+      replaceHistory("calculateMacros");
 
       // TODO: testing, remove
-      //$("#carbs").val("45");
-      //$("#fat").val("140");
-      //$("#protein").val("250");
-      //calculateCals();
+      /**
+      $("#carbs").val("45");
+      $("#fat").val("140");
+      $("#protein").val("250");
+      calculateCals();
+      */
     }
 
     function onCreateFoodClick(rowIndex) {
@@ -247,9 +250,7 @@
         let found = foods.some(y => y.name === x);
         if (found) {
           dedupd[x] = foods.find(y => y.name === x).clone();
-        } else {
-          // TODO: Handle custom created food in here.
-        }
+        } 
       });
       let input = [];
       for (const prop in dedupd) {
@@ -258,6 +259,7 @@
       let results = calculateServings(input, goals);
       console.log(results);
       displayResults(results);
+      replaceHistory("viewResults");
     }
 
     function displayResults(results) {
@@ -294,6 +296,13 @@
       goals.calories = cals;
       $("#calculatedCals").first().text("Total Calories: " + cals.toString());
       $("#foodSection").removeClass("d-none");
+      replaceHistory("selectFoods");
+    }
+
+    function replaceHistory(newAction) {
+      if (window.history.replaceState) {
+        window.history.replaceState({}, null, `?action=${newAction}`);
+      }
     }
 
     function appendFoodRow() {

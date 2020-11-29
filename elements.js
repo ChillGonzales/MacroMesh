@@ -194,16 +194,3 @@ function errorDisplay(calculated, expected, warningBound = 3, dangerBound = 6) {
   }
   return display;
 }
-
-// export function getResultDisplay(food) {
-//   return `
-//     <ul class="list-inline">
-//       <li class="list-inline-item"><strong>Name:</strong> ${food.name}</li>
-//       <li class="list-inline-item"><strong>Servings:</strong> ${food.servings} ${food.uom}</li>
-//       <li class="list-inline-item"><strong>Carbs:</strong> ${food.totalCarbs}g</li>
-//       <li class="list-inline-item"><strong>Fat:</strong> ${food.totalFat}g</li>
-//       <li class="list-inline-item"><strong>Protein:</strong> ${food.totalProtein}g</li>
-//       <li class="list-inline-item"><strong>Calories:</strong> ${food.totalCalories}</li>
-//     </ul>
-//   `;
-//}
