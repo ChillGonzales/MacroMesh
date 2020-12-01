@@ -78,32 +78,91 @@
         <h3>Enter Daily Macro Goals</h3>
       </div>
     </div>
-    <div class="form">
-      <div class="form-group row">
-        <div class="col-lg-3 col-sm-12">
-          <label for="carbs">Carbs (g)</label>
-          <input type="number" class="form-control" id="carbs" placeholder="Enter carbs (g)">
+    <div class="card card-body" id="macroInputCard">
+      <div class="form">
+        <div class="form-group row">
+          <div class="col-lg-3 col-sm-12">
+            <label for="carbs">Carbs (g)</label>
+            <input type="number" class="form-control" id="carbs" placeholder="Enter carbs (g)">
+          </div>
+          <div class="col-lg-3 col-sm-12">
+            <label for="fat">Fat (g)</label>
+            <input type="number" class="form-control" id="fat" placeholder="Enter fat (g)">
+          </div>
+          <div class="col-lg-3 col-sm-12">
+            <label for="protein">Protein (g)</label>
+            <input type="number" class="form-control" id="protein" placeholder="Enter protein (g)">
+          </div>
         </div>
-        <div class="col-lg-3 col-sm-12">
-          <label for="fat">Fat (g)</label>
-          <input type="number" class="form-control" id="fat" placeholder="Enter fat (g)">
+        <div class="row">
+          <div class="col-lg-3 col-sm-12">
+            <p class="lead" id="calculatedCals">Total Calories: </p>
+          </div>
         </div>
-        <div class="col-lg-3 col-sm-12">
-          <label for="protein">Protein (g)</label>
-          <input type="number" class="form-control" id="protein" placeholder="Enter protein (g)">
+        <div class="form-group row">
+          <div class="col">
+            <button id="calculateBtn" type="submit" class="btn btn-primary">Calculate Calories</button>
+            <i data-toggle="tooltip" data-html="true" data-trigger="hover" data-placement="bottom"
+              title="Calculates your calories from your macro goals. <b>If you change your macros after calculating, you must recalculate for the changes to take effect.</b>"
+              class="fas fa-lg fa-info-circle text-dark"></i>
+            <button data-toggle="tooltip" 
+              id="toggleToPctBtn"
+              class="btn btn-sm btn-primary float-right" 
+              data-placement="bottom"
+              title="Switch to percent mode."
+              type="button">
+                <i class="fas text-light fa-lg fa-percent"></i>
+            </button>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-lg-3 col-sm-12">
-          <p class="lead" id="calculatedCals">Total Calories: </p>
+    </div>
+    <div class="card card-body d-none" id="pctInputCard">
+      <div class="form">
+        <div class="form-group row">
+          <div class="col-lg-3 col-sm-12">
+            <label for="carbPct">Carbs Percent</label>
+            <input type="number" class="form-control" id="carbsPct" placeholder="Enter carbs %">
+          </div>
+          <div class="col-lg-3 col-sm-12">
+            <label for="fatPct">Fat Percent</label>
+            <input type="number" class="form-control" id="fatPct" placeholder="Enter fat %">
+          </div>
+          <div class="col-lg-3 col-sm-12">
+            <label for="proteinPct">Protein Percent</label>
+            <input type="number" class="form-control" id="proteinPct" placeholder="Enter protein %">
+          </div>
+          <div class="col-lg-3 col-sm-12">
+            <label for="calories">Calories</label>
+            <input type="number" class="form-control" id="calories" placeholder="Enter calories">
+          </div>
         </div>
-      </div>
-      <div class="form-group row">
-        <div class="col">
-          <button id="calculateBtn" type="submit" class="btn btn-primary">Calculate Calories</button>
-          <i data-toggle="tooltip" data-html="true" data-trigger="hover" data-placement="bottom"
-            title="Calculates your calories from your macro goals. <b>If you change your macros after calculating, you must recalculate for the changes to take effect.</b>"
-            class="fas fa-lg fa-info-circle text-dark"></i>
+        <div class="row">
+          <div class="col-lg-3 col-sm-12">
+            <p class="lead" id="calculatedCarbs">Carbs (g): </p>
+          </div>
+          <div class="col-lg-3 col-sm-12">
+            <p class="lead" id="calculatedFat">Fat (g): </p>
+          </div>
+          <div class="col-lg-3 col-sm-12">
+            <p class="lead" id="calculatedProtein">Protein (g): </p>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col">
+            <button id="calculateMacrosPctBtn" type="submit" class="btn btn-primary">Calculate Macros</button>
+            <i data-toggle="tooltip" data-html="true" data-trigger="hover" data-placement="bottom"
+              title="Calculates your macros from your percents and calories. <b>If you change your percents/calories after calculating, you must recalculate for the changes to take effect.</b>"
+              class="fas fa-lg fa-info-circle text-dark"></i>
+            <button data-toggle="tooltip" 
+              id="toggleToMacroBtn"
+              class="btn btn-sm btn-primary float-right" 
+              data-placement="bottom"
+              title="Switch to macro mode."
+              type="button">
+                <i class="fas text-light fa-lg fa-calculator"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -175,8 +234,11 @@
       // This activates bootstrap picker (for searchable select menus)
       //$(() => $('.selectpicker').selectpicker());
       document.getElementById("calculateBtn").addEventListener("click", calculateCals);
+      document.getElementById("calculateMacrosPctBtn").addEventListener("click", calculateMacros);
       document.getElementById("servingsBtn").addEventListener("click", calcServings);
       document.getElementById("addFoodBtn").addEventListener("click", appendFoodRow);
+      document.getElementById("toggleToPctBtn").addEventListener("click", () => changeInputPane("pct"));
+      document.getElementById("toggleToMacroBtn").addEventListener("click", () => changeInputPane("macro"));
       appendFoodRow();
       appendFoodRow();
       appendFoodRow();
@@ -189,6 +251,16 @@
       $("#protein").val("250");
       calculateCals();
       */
+    }
+
+    function changeInputPane(toView) {
+      if (toView === "pct") {
+        $("#macroInputCard").addClass("d-none");
+        $("#pctInputCard").removeClass("d-none");
+      } else {
+        $("#macroInputCard").removeClass("d-none");
+        $("#pctInputCard").addClass("d-none");
+      }
     }
 
     function onCreateFoodClick(rowIndex) {
@@ -286,10 +358,10 @@
     }
 
     function calculateCals() {
-      var carbs = parseInt($("#carbs").val());
-      var fat = parseInt($("#fat").val());
-      var prot = parseInt($("#protein").val());
-      var cals = 4 * carbs + 9 * fat + 4 * prot;
+      let carbs = parseInt($("#carbs").val());
+      let fat = parseInt($("#fat").val());
+      let prot = parseInt($("#protein").val());
+      let cals = 4 * carbs + 9 * fat + 4 * prot;
       if (!cals) {
         return;
       }
@@ -299,6 +371,22 @@
       goals.calories = cals;
       $("#calculatedCals").first().text("Total Calories: " + cals.toString());
       $("#foodSection").removeClass("d-none");
+      replaceHistory("selectFoods");
+    }
+
+    function calculateMacros() {
+      let carbPct = parseInt($("#carbPct").val());
+      let fatPct = parseInt($("#fatPct").val());
+      let proteinPct = parseInt($("#proteinPct").val());
+      let cals = parseInt($("calories").val());
+
+      let carbGrams = Math.round((cals * carbPct) / 4);
+      let fatGrams = Math.round((cals * fatPct) / 9);
+      let proteinGrams = Math.round((cals * proteinPct) / 4);
+
+      $("#calculatedCarbs").first().text(`Carbs (g): ${carbGrams}g`);
+      $("#calculatedFat").first().text(`Fat (g): ${fatGrams}g`);
+      $("#calculatedProtein").first().text(`Protein (g): ${proteinGrams}g`);
       replaceHistory("selectFoods");
     }
 
