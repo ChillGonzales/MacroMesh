@@ -6,12 +6,6 @@ export function getFoodSelect(index) {
       <div class="row pt-2">
         <div class="col-lg-5 col-sm-12">
           <select id="foodSelect${index}" class="form-control foodSelect">
-            <option selected value="">Select a food...</option>
-            <option value="Eggs">Eggs</option>
-            <option value="Chicken">Chicken Breast</option>
-            <option value="Beef">80/20 Ground Beef</option>
-            <option value="Cheese">Cheese</option>
-            <option value="Rice">White Rice</option>
           </select>
         </div>
         <div class="col-lg-1 col-sm-12">

@@ -159,13 +159,9 @@
     "use strict";
     import { Food, FoodTotals, DailyGoals, calculateServings } from "./main.js";
     import { getFoodSelect, getResultDisplay, getTotalDisplay, getCustomFoodEditorRow, getCreatedFoodRow } from "./elements.js";
+    import { getFoods } from "./foods.js";
 
-    let eggs = new Food("Eggs", "egg(s)", 1, 6, 5, 1, 6);
-    let chicken = new Food("Chicken", "oz", 0, 9, 1, 1, 24);
-    let beef = new Food("Beef", "oz", 0, 7, 5, 1, 24);
-    let cheese = new Food("Cheese", "oz", 0, 7, 9, 1, 8);
-    let rice = new Food("Rice", "oz", 8, 1, 0, 1, 16);
-    let foods = [eggs, chicken, beef, cheese, rice];
+    let foods = getFoods();
     let goals = new DailyGoals();
     onLoad();
 
@@ -317,23 +313,29 @@
     function appendFoodRow() {
       let $selects = $("select.foodSelect");
       let id = 0;
+      let $newSelect = null;
       if ($selects.length > 0) {
         // Append a row
         id = $selects.length + 1;
         let $lastSelectDiv = $selects.last().parent().parent().parent();
         let newSelectText = getFoodSelect(id);
-        let $newSelect = $(newSelectText);
+        $newSelect = $(newSelectText);
         $lastSelectDiv.after($newSelect);
       } else {
         // Handle the case of no rows existing yet
         id = 1;
         let newSelectText = getFoodSelect(id);
-        let $newSelect = $(newSelectText);
+        $newSelect = $(newSelectText);
         let $foodSectionHeader = $("#foodSectionHeader");
         if ($foodSectionHeader.length > 0) {
           $foodSectionHeader.after($newSelect);
         }
       }
+      $newSelect = $(`#foodSelect${id}`);
+      $newSelect.append($("<option>", { value: "" }).text("Select a food..."));
+      foods.forEach(x => {
+          $newSelect.append($("<option>", { value: x.name }).text(x.name));
+      });
       // Add event handlers
       document.getElementById("create" + id).addEventListener("click", () => onCreateFoodClick(id));
       document.getElementById("remove" + id).addEventListener("click", () => onRemoveFoodClick(id));
