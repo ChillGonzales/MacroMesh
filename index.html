@@ -12,9 +12,6 @@
     gtag('config', 'G-N5YWZJW0FF');
   </script>
 
-  <!-- Plausible -->
-  <script async defer data-domain="macroapp.com" src="https://plausible.io/js/plausible.js"></script>
-
   <!-- Crisp chat bot -->
   <script
     type="text/javascript">window.$crisp = []; window.CRISP_WEBSITE_ID = "d8568dc2-773d-4a02-9b80-ec8f00e37863"; (function () { d = document; s = d.createElement("script"); s.src = "https://client.crisp.chat/l.js"; s.async = 1; d.getElementsByTagName("head")[0].appendChild(s); })();</script>
@@ -31,21 +28,34 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />-->
+
+  <!-- Font awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css">
+  <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
 </head>
 
 <body>
-  <!-- Uncomment when I actually have other menu items -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">
-      Macro Mesh
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav mr-sm-2">
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/monroethedev" target="_blank"><span
+              class="fab fa-twitter"></span> Follow</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/ChillGonzales/MacroMesh" target="_blank"><span
+              class="fab fa-github"></span> Contribute</a>
+        </li>
+      </ul>
+    </div>
+    <div class="mx-auto order-0">
+      <a class="navbar-brand mx-auto" href="#">Macro Mesh</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+      <ul class="navbar-nav ml-auto">
         <li class="nav-item">
           <a class="nav-link" href="#" data-toggle="modal" data-target="#requestFeatureModal">Request a Feature</a>
         </li>
@@ -53,8 +63,8 @@
     </div>
   </nav>
   <!-- Modal -->
-  <div class="modal fade" id="requestFeatureModal" tabindex="-1" role="dialog" aria-labelledby="requestFeatureModalLabel"
-    aria-hidden="true">
+  <div class="modal fade" id="requestFeatureModal" tabindex="-1" role="dialog"
+    aria-labelledby="requestFeatureModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -64,7 +74,8 @@
           </button>
         </div>
         <div class="modal-body">
-          <p>To request a new feature, please use the chat button in the bottom right corner of your screen. This allows you to send a message directly to me, the developer!</p>
+          <p>To request a new feature, please use the chat button in the bottom right corner of your screen. This allows
+            you to send a message directly to me, the developer!</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
@@ -152,8 +163,6 @@
     integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
     crossorigin="anonymous"></script>
   <script src="vendor/bootstrap-4.0.0/dist/js/bootstrap.min.js"></script>
-  <script src="https://kit.fontawesome.com/8b7fb7a0f0.js" crossorigin="anonymous"></script>
-  <!--<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>-->
   <script type="module">
     // Enable strict mode
     "use strict";
@@ -249,7 +258,7 @@
         let found = foods.some(y => y.name === x);
         if (found) {
           dedupd[x] = foods.find(y => y.name === x).clone();
-        } 
+        }
       });
       let input = [];
       for (const prop in dedupd) {
@@ -305,9 +314,9 @@
       }
       // Send updated URL
       gtag("config", "G-N5YWZJW0FF", {
-        "page_title" : newAction,
+        "page_title": newAction,
         "page_path": path
-     });
+      });
     }
 
     function appendFoodRow() {
@@ -334,7 +343,7 @@
       $newSelect = $(`#foodSelect${id}`);
       $newSelect.append($("<option>", { value: "" }).text("Select a food..."));
       foods.forEach(x => {
-          $newSelect.append($("<option>", { value: x.name }).text(x.name));
+        $newSelect.append($("<option>", { value: x.name }).text(x.name));
       });
       // Add event handlers
       document.getElementById("create" + id).addEventListener("click", () => onCreateFoodClick(id));
