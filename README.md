@@ -17,7 +17,6 @@ Macro Mesh is a simple web application that is built using the following tech st
 - Chat: [Crisp Chat](crisp.chat)
 - Analytics: [Google Analytics](analytics.google.com)
 
-
 No package management, bundling/transpiling, or front end frameworks needed!
 
 
