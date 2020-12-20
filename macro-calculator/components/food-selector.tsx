@@ -1,11 +1,11 @@
 import React from 'react';
 
 class FoodSelector extends React.Component {
-  constructor(props) {
+  constructor(props: any) {
     super(props);
   }
 
-  render() {
+  public render(): JSX.Element {
     return (
       <div id="foodSection" className="d-none row">
         <div className="col">

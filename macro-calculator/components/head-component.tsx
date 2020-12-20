@@ -2,7 +2,7 @@ import Head from 'next/head';
 import React from 'react';
 
 class HeadComponent extends React.Component {
-  render() {
+  public render(): JSX.Element {
     return (
       <Head>
         <title>Macronutrient Meal Plan Calculator</title>

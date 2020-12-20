@@ -1,10 +1,11 @@
 import React from 'react';
 
 class MacroInput extends React.Component {
-  constructor(props) {
+  constructor(props: any) {
     super(props);
   }
-  render() {
+
+  public render(): JSX.Element {
     return (
       <>
         <div className="row">
