@@ -1,5 +1,6 @@
 import React from 'react';
 import $ from 'jquery';
+import { DailyGoals } from '../core/solver';
 
 class MacroInput extends React.Component<IMacroProps, IState> {
 
@@ -13,7 +14,7 @@ class MacroInput extends React.Component<IMacroProps, IState> {
   }
 
   public componentDidMount() {
-    $('[data-toggle="tooltip"]').tooltip();
+    //$('[data-toggle="tooltip"]').tooltip();
   }
 
   private toggleTooltip(): void {
@@ -24,7 +25,9 @@ class MacroInput extends React.Component<IMacroProps, IState> {
     if (!this.state.carbs || !this.state.protein || !this.state.fat) {
       return;
     }
-    this.setState({ calories: 4 * this.state.carbs + 9 * this.state.fat + 4 * this.state.protein });
+    const calories = 4 * this.state.carbs + 9 * this.state.fat + 4 * this.state.protein;
+    this.setState({ calories: calories });
+    this.props.onGoalsSet({ calories: calories, fat: this.state.fat, carbs: this.state.carbs, protein: this.state.protein });
   }
 
   private onInputChanged(event: React.ChangeEvent<HTMLInputElement>): void {
@@ -84,13 +87,7 @@ class MacroInput extends React.Component<IMacroProps, IState> {
 }
 export default MacroInput;
 export interface IMacroProps {
-  onGoalsSet(): MacroGoals;
-}
-export interface MacroGoals {
-  carbGoal: number;
-  fatGoal: number;
-  proteinGoal: number;
-  calorieGoal: number;
+  onGoalsSet(goals: DailyGoals): void;
 }
 interface IState {
   carbs?: number;

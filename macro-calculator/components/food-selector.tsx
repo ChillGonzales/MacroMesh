@@ -1,13 +1,24 @@
 import React from 'react';
+import { Food } from '../core/solver';
 
-class FoodSelector extends React.Component {
-  constructor(props: any) {
+class FoodSelector extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
     super(props);
+
+    this.state = { show: false };
+  }
+
+  private saveFood(): void {
+    this.props.onFoodSet([]);
+  }
+
+  public setShow(newState: boolean) {
+    this.setState({ show: newState });
   }
 
   public render(): JSX.Element {
     return (
-      <div id="foodSection" className="d-none row">
+      <div id="foodSection" className={"row " + (this.state.show ? "" : "d-none")}>
         <div className="col">
           <hr />
           <div id="foodSectionHeader" className="row">
@@ -27,7 +38,7 @@ class FoodSelector extends React.Component {
           </div>
           <div className="row pt-3">
             <div className="col">
-              <button id="servingsBtn" type="button" className="btn btn-success">Calculate Servings</button>
+              <button id="servingsBtn" type="button" onClick={() => this.saveFood()} className="btn btn-success">Calculate Servings</button>
             </div>
           </div>
         </div>
@@ -37,3 +48,10 @@ class FoodSelector extends React.Component {
 }
 
 export default FoodSelector;
+
+export interface IProps {
+  onFoodSet(foods: Food[]): void;
+}
+export interface IState {
+  show: boolean;
+}
