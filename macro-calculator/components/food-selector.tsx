@@ -31,9 +31,9 @@ class FoodSelector extends React.Component<IProps, IState> {
               </h3>
             </div>
           </div>
-          <FoodSearchBar />
-          <FoodSearchBar />
-          <FoodSearchBar />
+          <FoodSearchBar id={1} />
+          <FoodSearchBar id={2} />
+          <FoodSearchBar id={3} />
           <div className="row py-3">
             <div className="col">
               <button id="addFoodBtn" type="button" className="btn btn-outline-secondary btn-sm btn-block">Add Another
