@@ -28,10 +28,6 @@ class HeadComponent extends React.Component {
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="style.css" />
-
-        {/*  Font awesome */}
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" />
-        <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
       </Head>
     );
   }

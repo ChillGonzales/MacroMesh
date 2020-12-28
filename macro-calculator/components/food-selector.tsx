@@ -1,5 +1,6 @@
 import React from 'react';
 import { Food } from '../core/solver';
+import FoodSearchBar from './food-search-bar';
 
 class FoodSelector extends React.Component<IProps, IState> {
   constructor(props: IProps) {
@@ -30,6 +31,9 @@ class FoodSelector extends React.Component<IProps, IState> {
               </h3>
             </div>
           </div>
+          <FoodSearchBar />
+          <FoodSearchBar />
+          <FoodSearchBar />
           <div className="row py-3">
             <div className="col">
               <button id="addFoodBtn" type="button" className="btn btn-outline-secondary btn-sm btn-block">Add Another

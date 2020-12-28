@@ -17,8 +17,8 @@ class Results extends React.Component<IProps, IState> {
     };
   }
 
+  // This might not need to be a function variable like this. A normal method might do.
   private getRows: () => JSX.Element[] = () => {
-    console.log(this.state.foods);
     const elems = this.state.foods.map(food => {
       return (
         <tr key={food.name}>
