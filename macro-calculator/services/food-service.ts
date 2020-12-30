@@ -2,7 +2,7 @@ import { Food } from "../core/solver";
 
 export class FoodService {
 
-  public async SearchFood(token: string): Promise<SearchResult[]> {
+  public async searchFood(token: string): Promise<SearchResult[]> {
     const response = await fetch(`https://api.spoonacular.com/food/ingredients/autocomplete?apiKey=acd0407dd0a24276a1972db37fc22f29&query=${token}&number=5&metaInformation=true`,
       { cache: "force-cache" });
     const data = await response.json();
@@ -19,17 +19,18 @@ export class FoodService {
     }
   }
 
-  public async GetInfo(id: string, unit: string): Promise<Food> {
+  public async getInfo(id: string, unit: string): Promise<Food> {
     const response = await fetch(`https://api.spoonacular.com/food/ingredients/${id}/information?apiKey=acd0407dd0a24276a1972db37fc22f29&amount=1&unit=${unit}`, { cache: "force-cache" });
     const data = await response.json();
+    console.log(data);
     return new Food(
       data.name,
       unit,
-      data.nutrients.find((x: any) => x.title === "Carbohydrates").amount,
-      data.nutrients.find((x: any) => x.title === "Protein").amount,
-      data.nutrients.find((x: any) => x.title === "Fat").amount,
+      data.nutrition.nutrients.find((x: any) => x.title === "Carbohydrates").amount,
+      data.nutrition.nutrients.find((x: any) => x.title === "Protein").amount,
+      data.nutrition.nutrients.find((x: any) => x.title === "Fat").amount,
       1,
-      1,
+      9999,
       1
     );
   }

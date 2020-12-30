@@ -80,7 +80,7 @@ export class Differences {
       (this.carbDiff * this.carbImportance) +
       (this.fatDiff * this.fatImportance) +
       (this.proteinDiff * this.proteinImportance) +
-      (this.calDiff * 0.2 * this.calImportance)
+      (this.calDiff * 0.1 * this.calImportance)
     );
   }
 }
@@ -156,6 +156,7 @@ function getPossibleChanges(foods: Food[]): any {
   // This method will have to be more complex if we are to consider more than that (like negative changes)
 
   // We can do base 3 now? HYPE.
+  // TODO: Think about doing base 4 or base 5 so that we could introduce choices for adding 5 or 10 of a unit instead of just +/-1 and 0.
   let numberOfChoices = 3;
   let count = foods.length;
   // This is how you compute the possibilities of 2 choices for x number of foods. 2^x

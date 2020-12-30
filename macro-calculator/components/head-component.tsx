@@ -7,7 +7,7 @@ class HeadComponent extends React.Component {
       <Head>
         <title>Macronutrient Meal Plan Calculator</title>
         <meta name="description" content="Build a meal plan that fits your daily macronutrient budget using our free online calculator!" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/public/favicon.ico" />
 
         {/* Global site tag (gtag.js) - Google Analytics */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-N5YWZJW0FF"></script>
@@ -27,7 +27,6 @@ class HeadComponent extends React.Component {
         {/* Montserrat font */}
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet" />
-        <link rel="stylesheet" href="style.css" />
       </Head>
     );
   }

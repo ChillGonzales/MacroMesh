@@ -1,16 +1,58 @@
 import React from 'react';
 import { Food } from '../core/solver';
+import { FoodService, SearchResult } from '../services/food-service';
 import FoodSearchBar from './food-search-bar';
 
 class FoodSelector extends React.Component<IProps, IState> {
+  private results: Map<number, SearchResult> = new Map<number, SearchResult>();
+  private foodService: FoodService;
+
   constructor(props: IProps) {
     super(props);
 
-    this.state = { show: false };
+    this.state = { show: false, searchBarIds: [1, 2, 3] };
+    this.foodService = new FoodService();
+    this.onFoodAdded = this.onFoodAdded.bind(this);
   }
 
-  private saveFood(): void {
-    this.props.onFoodSet([]);
+  private async saveFood(): Promise<void> {
+    const foods = Array.from(this.results).map(([k, x]) => {
+      return this.foodService.getInfo(x.id, x.possibleUnits[0]);
+    });
+    const all = await Promise.all(foods);
+    console.log(all);
+    this.props.onFoodSet(all);
+  }
+
+  private onFoodAdded(result: SearchResult | null, id: number): void {
+    if (!result) {
+      let index = this.state.searchBarIds.indexOf(id);
+      if (index === -1) return;
+
+      // Remove index from state
+      const newArr = this.state.searchBarIds;
+      newArr.splice(index, 1);
+      this.setState({ searchBarIds: newArr });
+      this.results.delete(id);
+    } else {
+      console.log(result);
+      this.results.set(id, result);
+    }
+  }
+
+  private addFood(): void {
+    const newArr = this.state.searchBarIds;
+    const highestId = Math.max(...newArr);
+    newArr.push(highestId + 1);
+    this.setState({ searchBarIds: newArr });
+  }
+
+  private getSearchBars(): JSX.Element[] {
+    return this.state.searchBarIds.map(id => {
+      return (
+        <FoodSearchBar key={id} onSelectionCleared={() => this.onFoodAdded(null, id)} onSelectionChanged={x => this.onFoodAdded(x, id)} id={id} />
+      );
+    });
   }
 
   public setShow(newState: boolean) {
@@ -31,12 +73,10 @@ class FoodSelector extends React.Component<IProps, IState> {
               </h3>
             </div>
           </div>
-          <FoodSearchBar id={1} />
-          <FoodSearchBar id={2} />
-          <FoodSearchBar id={3} />
+          {this.getSearchBars()}
           <div className="row py-3">
             <div className="col">
-              <button id="addFoodBtn" type="button" className="btn btn-outline-secondary btn-sm btn-block">Add Another
+              <button id="addFoodBtn" type="button" onClick={() => this.addFood()} className="btn btn-outline-secondary btn-sm btn-block">Add Another
                     Food</button>
             </div>
           </div>
@@ -58,4 +98,5 @@ export interface IProps {
 }
 export interface IState {
   show: boolean;
+  searchBarIds: number[];
 }
